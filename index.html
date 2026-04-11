@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joce'S Salon, Spa & Barbería </title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="logo">Joce'S</div>
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <h1>Tu momento de desconexión</h1>
+            <p>Experiencias de bienestar diseñadas para renovar tu cuerpo y mente.</p>
+            <a href="#servicios" class="btn">Ver Servicios</a>
+        </div>
+    </section>
+
+    <section id="servicios" class="services">
+        <h2>Nuestros Servicios</h2>
+        <div class="tabs-container">
+            <div class="tabs-nav">
+                <button class="tab-btn active" data-tab="esmaltado">Esmaltado Permanente</button>
+                <button class="tab-btn" data-tab="exfoliacion">Exfoliación de Manos</button>
+                <button class="tab-btn" data-tab="masajes">Masajes Relajantes</button>
+                <button class="tab-btn" data-tab="auriculoterapia">Auriculoterapia</button>
+            </div>
+            
+            <div class="tabs-content">
+                <div class="tab-pane active" id="esmaltado">
+                    <div class="service-detail">
+                        <div class="service-image">
+                            <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80" alt="Esmaltado Permanente">
+                        </div>
+                        <div class="service-info">
+                            <h3>Esmaltado Permanente</h3>
+                            <div class="price-duration">
+                                <span class="price">$25.000</span>
+                                <span class="duration">45 min</span>
+                            </div>
+                            <p class="description">Tratamiento de uñas con esmalte semipermanente que garantiza un color impecable y brillo duradero por hasta 3 semanas. Ideal para quienes buscan una manicura perfecta sin preocuparse por el desgaste diario.</p>
+                            <div class="benefits">
+                                <h4>Beneficios:</h4>
+                                <ul>
+                                    <li>Mayor duración que el esmalte tradicional</li>
+                                    <li>Secado instantáneo con luz LED</li>
+                                    <li>No se astilla ni decolora</li>
+                                    <li>Amplia variedad de colores</li>
+                                </ul>
+                            </div>
+                            <button class="btn-agendar" data-service="Esmaltado Permanente">Agendar Hora</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-pane" id="exfoliacion">
+                    <div class="service-detail">
+                        <div class="service-image">
+                            <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80" alt="Exfoliación de Manos">
+                        </div>
+                        <div class="service-info">
+                            <h3>Exfoliación de Manos</h3>
+                            <div class="price-duration">
+                                <span class="price">$18.000</span>
+                                <span class="duration">30 min</span>
+                            </div>
+                            <p class="description">Tratamiento intensivo que elimina células muertas e impurezas, devolviendo la suavidad natural y juventud a tus manos. Utilizamos productos premium con ingredientes naturales.</p>
+                            <div class="benefits">
+                                <h4>Beneficios:</h4>
+                                <ul>
+                                    <li>Piel suave y renovada</li>
+                                    <li>Mejora la circulación</li>
+                                    <li>Previene el envejecimiento prematuro</li>
+                                    <li>Prepara las manos para otros tratamientos</li>
+                                </ul>
+                            </div>
+                            <button class="btn-agendar" data-service="Exfoliación de Manos">Agendar Hora</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-pane" id="masajes">
+                    <div class="service-detail">
+                        <div class="service-image">
+                            <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=600&q=80" alt="Masajes Relajantes">
+                        </div>
+                        <div class="service-info">
+                            <h3>Masajes Relajantes</h3>
+                            <div class="price-duration">
+                                <span class="price">$35.000</span>
+                                <span class="duration">60 min</span>
+                            </div>
+                            <p class="description">Sesión de masaje terapéutico diseñada para liberar tensiones acumuladas y restaurar el equilibrio mente-cuerpo. Técnicas especializadas adaptadas a tus necesidades específicas.</p>
+                            <div class="benefits">
+                                <h4>Beneficios:</h4>
+                                <ul>
+                                    <li>Reducción del estrés y ansiedad</li>
+                                    <li>Mejora la circulación sanguínea</li>
+                                    <li>Alivia dolores musculares</li>
+                                    <li>Promueve el sueño reparador</li>
+                                </ul>
+                            </div>
+                            <button class="btn-agendar" data-service="Masajes Relajantes">Agendar Hora</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-pane" id="auriculoterapia">
+                    <div class="service-detail">
+                        <div class="service-image">
+                            <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=600&q=80" alt="Auriculoterapia">
+                        </div>
+                        <div class="service-info">
+                            <h3>Auriculoterapia</h3>
+                            <div class="price-duration">
+                                <span class="price">$28.000</span>
+                                <span class="duration">40 min</span>
+                            </div>
+                            <p class="description">Técnica terapéutica basada en la estimulación de puntos específicos del pabellón auricular para restaurar el equilibrio energético del cuerpo y tratar diversas condiciones de salud.</p>
+                            <div class="benefits">
+                                <h4>Beneficios:</h4>
+                                <ul>
+                                    <li>Equilibrio energético natural</li>
+                                    <li>Alivio del dolor crónico</li>
+                                    <li>Reducción de ansiedad y estrés</li>
+                                    <li>Mejora del sueño y concentración</li>
+                                </ul>
+                            </div>
+                            <button class="btn-agendar" data-service="Auriculoterapia">Agendar Hora</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Agenda Semanal -->
+    <section id="agenda-semanal" class="agenda-semanal">
+        <div class="container">
+            <h2>Agenda Semanal</h2>
+            <div id="citasContainer">
+                <div class="no-citas-calendario">
+                    <div class="calendario-vacio">
+                        <h3>No tienes citas agendadas</h3>
+                        <p>Agenda tu primera cita para verla en el calendario</p>
+                        <a href="#servicios" class="btn">Agendar una cita</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de Agendamiento -->
+    <div id="modalAgendamiento" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Agendar Hora</h2>
+            <form id="formAgendamiento">
+                <div class="form-group">
+                    <label for="nombre">Nombre Completo:</label>
+                    <input type="text" id="nombre" name="nombre" required placeholder="Solo letras" pattern="[A-Za-zÁáÉéÍíÓóÚúÑñ\s]+" title="Solo se permiten letras y espacios">
+                </div>
+                <div class="form-group">
+                    <label for="rut">RUT:</label>
+                    <input type="text" id="rut" name="rut" required placeholder="12.345.678-9" maxlength="12" title="Formato: XX.XXX.XXX-X">
+                </div>
+                <div class="form-group">
+                    <label for="servicio">Servicio:</label>
+                    <select id="servicio" name="servicio" required>
+                        <option value="">Seleccionar servicio</option>
+                        <option value="Esmaltado Permanente">Esmaltado Permanente</option>
+                        <option value="Exfoliación de Manos">Exfoliación de Manos</option>
+                        <option value="Masajes Relajantes">Masajes Relajantes</option>
+                        <option value="Auriculoterapia">Auriculoterapia</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fecha">Fecha:</label>
+                    <div class="date-input-wrapper">
+                        <input type="date" id="fecha" name="fecha" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="hora">Hora:</label>
+                    <div class="time-input-wrapper">
+                        <select id="hora" name="hora" required>
+                            <option value="">Seleccionar fecha primero</option>
+                        </select>
+                        <div class="time-icon">🕐</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="telefono">Teléfono (opcional):</label>
+                    <input type="tel" id="telefono" name="telefono" placeholder="+56 9 1234 5678">
+                </div>
+                <button type="submit" class="btn-submit">Confirmar Agendamiento</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    <div id="modalConfirmacion" class="modal">
+        <div class="modal-content">
+            <h2>¡Hora Agendada Exitosamente!</h2>
+            <div id="confirmacionDetalles"></div>
+            <button class="btn-close-modal">Cerrar</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; <span id="currentYear"></span> Joce'S Salon, Spa & Barbería. Todos los derechos reservados.</p>
+        <p>R4</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
