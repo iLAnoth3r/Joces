@@ -22,7 +22,6 @@ function updateCurrentYear() {
 class AgendaVirtual {
     constructor() {
         this.citas = JSON.parse(localStorage.getItem('citas')) || [];
-        this.currentWeekOffset = 0;
         this.init();
     }
 
@@ -31,7 +30,6 @@ class AgendaVirtual {
         this.setupModalListeners();
         this.setupFormValidation();
         this.setMinDate();
-        this.cargarCitas();
         this.setupNavigation();
     }
 
@@ -290,13 +288,13 @@ class AgendaVirtual {
             fecha: document.getElementById('fecha').value,
             hora: document.getElementById('hora').value,
             telefono: document.getElementById('telefono').value.trim(),
-            estado: 'confirmada',
+            estado: 'pendiente',
             fechaCreacion: new Date().toISOString()
         };
 
-        this.guardarCita(cita);
+        this.enviarWhatsAppConsulta(cita);
         this.closeModal();
-        this.showConfirmation(cita);
+        this.showWhatsAppConfirmation(cita);
     }
 
     guardarCita(cita) {
@@ -304,18 +302,65 @@ class AgendaVirtual {
         localStorage.setItem('citas', JSON.stringify(this.citas));
     }
 
-    showConfirmation(cita) {
+    enviarWhatsAppConsulta(cita) {
+        // Número de WhatsApp del spa
+        const numeroSpa = '56971003272';
+        
+        // Formatear fecha para mejor legibilidad
+        const fechaFormateada = new Date(cita.fecha).toLocaleDateString('es-CL', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        
+        // Crear mensaje de consulta del cliente a la empresa
+        const mensaje = `Hola Joce's Salon Spa & Barbería,
+
+Me gustaría consultar disponibilidad para agendar una hora:
+
+*Datos de la consulta:*
+Servicio: ${cita.servicio}
+Fecha: ${fechaFormateada}
+Hora: ${cita.hora}
+
+*Mis datos:*
+Nombre: ${cita.nombre}
+RUT: ${cita.rut}
+Teléfono: ${cita.telefono || 'No proporcionado'}
+
+¿Tienen disponibilidad para esta fecha y hora?
+Quedo atento a su respuesta.
+
+¡Gracias!`;
+        
+        // Crear URL de WhatsApp
+        const urlWhatsApp = `https://wa.me/${numeroSpa}?text=${encodeURIComponent(mensaje)}`;
+        
+        // Abrir WhatsApp en una nueva pestaña
+        window.open(urlWhatsApp, '_blank');
+    }
+
+    showWhatsAppConfirmation(cita) {
         const modal = document.getElementById('modalConfirmacion');
         const detalles = document.getElementById('confirmacionDetalles');
         
         detalles.innerHTML = `
-            <h3>Detalles de tu cita</h3>
-            <p><strong>Servicio:</strong> ${cita.servicio}</p>
-            <p><strong>Fecha:</strong> ${new Date(cita.fecha).toLocaleDateString('es-CL')}</p>
-            <p><strong>Hora:</strong> ${cita.hora}</p>
-            <p><strong>Nombre:</strong> ${cita.nombre}</p>
-            <p><strong>RUT:</strong> ${cita.rut}</p>
-            ${cita.telefono ? `<p><strong>Teléfono:</strong> ${cita.telefono}</p>` : ''}
+            <h3>¡Consulta enviada!</h3>
+            <p>Hemos abierto WhatsApp para que puedas contactar directamente con Joce's Salon Spa & Barbería.</p>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                <h4>Detalles de tu consulta:</h4>
+                <p><strong>Servicio:</strong> ${cita.servicio}</p>
+                <p><strong>Fecha:</strong> ${new Date(cita.fecha).toLocaleDateString('es-CL')}</p>
+                <p><strong>Hora:</strong> ${cita.hora}</p>
+                <p><strong>Nombre:</strong> ${cita.nombre}</p>
+                <p><strong>RUT:</strong> ${cita.rut}</p>
+                ${cita.telefono ? `<p><strong>Teléfono:</strong> ${cita.telefono}</p>` : ''}
+            </div>
+            <p style="color: #28a745; font-weight: bold;">
+                <strong>Importante:</strong> Tu hora quedará confirmada una vez que el spa responda tu mensaje y confirme la disponibilidad.
+            </p>
+            <p>Por favor espera la respuesta del spa para confirmar tu agendamiento.</p>
         `;
         
         modal.style.display = 'block';
@@ -326,7 +371,6 @@ class AgendaVirtual {
         const modal = document.getElementById('modalConfirmacion');
         modal.style.display = 'none';
         document.body.style.overflow = 'auto';
-        this.cargarCitas();
     }
 
     showError(message) {
@@ -373,173 +417,6 @@ class AgendaVirtual {
                 }
             });
         });
-    }
-
-    cargarCitas() {
-        const container = document.getElementById('citasContainer');
-        if (!container) return;
-
-        // Obtener citas del localStorage
-        this.citas = JSON.parse(localStorage.getItem('citas')) || [];
-        
-        // Filtrar solo citas confirmadas (no canceladas)
-        const citasConfirmadas = this.citas.filter(cita => cita.estado !== 'cancelada');
-
-        if (citasConfirmadas.length === 0) {
-            container.innerHTML = `
-                <div class="no-citas-calendario">
-                    <div class="calendario-vacio">
-                        <h3>No tienes citas agendadas</h3>
-                        <p>Agenda tu primera cita para verla en el calendario</p>
-                        <a href="#servicios" class="btn">Agendar una cita</a>
-                    </div>
-                </div>
-            `;
-            return;
-        }
-
-        // Generar calendario con navegación de semanas
-        const calendarioHTML = this.generarCalendarioConNavegacion(citasConfirmadas);
-        container.innerHTML = calendarioHTML;
-        
-        // Configurar eventos de navegación
-        this.setupNavegacionSemanal(citasConfirmadas);
-    }
-
-    generarCalendarioConNavegacion(citas) {
-        const today = new Date();
-        const currentWeekOffset = this.currentWeekOffset || 0;
-        const startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() - today.getDay() + (currentWeekOffset * 7)); // Domingo
-        
-        // Generar HTML del calendario semanal
-        let calendarioHTML = `
-            <div class="calendario-semanal-container">
-                <div class="calendario-semanal-header">
-                    <h3>Calendario Semanal</h3>
-                    <div class="navegacion-semanal">
-                        <button class="btn-semana btn-semana-anterior" id="btnSemanaAnterior">
-                            Semana Anterior
-                        </button>
-                        <button class="btn-semana btn-semana-siguiente" id="btnSemanaSiguiente">
-                            Semana Siguiente
-                        </button>
-                    </div>
-                </div>
-                <div class="calendario-semanal-grid">
-        `;
-
-        // Horas del día (de 10:00 a 18:00)
-        const horas = ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
-        
-        // Días de la semana
-        const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-        
-        // Header con días
-        calendarioHTML += '<div class="dias-header"><div class="hora-header">Hora</div>';
-        for (let i = 0; i < 7; i++) {
-            const diaFecha = new Date(startOfWeek.getTime() + i * 24 * 60 * 60 * 1000);
-            const esHoy = diaFecha.toDateString() === today.toDateString();
-            calendarioHTML += `
-                <div class="dia-header ${esHoy ? 'hoy' : ''}">
-                    <div class="dia-nombre">${diasSemana[i]}</div>
-                    <div class="dia-fecha">${diaFecha.getDate()}</div>
-                </div>
-            `;
-        }
-        calendarioHTML += '</div>';
-
-        // Body con horas y citas
-        horas.forEach(hora => {
-            calendarioHTML += '<div class="fila-hora">';
-            calendarioHTML += `<div class="hora-celda">${hora}</div>`;
-            
-            for (let i = 0; i < 7; i++) {
-                const diaFecha = new Date(startOfWeek.getTime() + i * 24 * 60 * 60 * 1000);
-                const fechaStr = diaFecha.toISOString().split('T')[0];
-                const esHoy = diaFecha.toDateString() === today.toDateString();
-                
-                // Buscar citas para esta hora y día
-                const citasHoraDia = citas.filter(cita => 
-                    cita.fecha === fechaStr && cita.hora === hora
-                );
-                
-                if (citasHoraDia.length > 0) {
-                    calendarioHTML += `
-                        <div class="celda-cita ${esHoy ? 'hoy' : ''}">
-                            ${citasHoraDia.map(cita => `
-                                <div class="cita-bloque">
-                                    <div class="cita-servicio">${cita.servicio}</div>
-                                    <div class="cita-nombre">${cita.nombre}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                } else {
-                    calendarioHTML += `<div class="celda-vacia ${esHoy ? 'hoy' : ''}"></div>`;
-                }
-            }
-            
-            calendarioHTML += '</div>';
-        });
-        
-        calendarioHTML += `
-                </div>
-            </div>
-        `;
-        
-        return calendarioHTML;
-    }
-
-    setupNavegacionSemanal(citas) {
-        const btnAnterior = document.getElementById('btnSemanaAnterior');
-        const btnSiguiente = document.getElementById('btnSemanaSiguiente');
-        
-        if (btnAnterior) {
-            btnAnterior.addEventListener('click', () => {
-                this.currentWeekOffset = (this.currentWeekOffset || 0) - 1;
-                this.actualizarCalendario(citas);
-            });
-        }
-        
-        if (btnSiguiente) {
-            btnSiguiente.addEventListener('click', () => {
-                this.currentWeekOffset = (this.currentWeekOffset || 0) + 1;
-                this.actualizarCalendario(citas);
-            });
-        }
-        
-        // Actualizar estado de los botones
-        this.actualizarEstadoBotones();
-    }
-
-    actualizarEstadoBotones() {
-        const btnAnterior = document.getElementById('btnSemanaAnterior');
-        const btnSiguiente = document.getElementById('btnSemanaSiguiente');
-        
-        if (btnAnterior) {
-            // Deshabilitar botón anterior si estamos en la semana actual o antes
-            if (this.currentWeekOffset <= 0) {
-                btnAnterior.disabled = true;
-                btnAnterior.classList.add('disabled');
-            } else {
-                btnAnterior.disabled = false;
-                btnAnterior.classList.remove('disabled');
-            }
-        }
-        
-        if (btnSiguiente) {
-            // El botón siguiente siempre está habilitado
-            btnSiguiente.disabled = false;
-            btnSiguiente.classList.remove('disabled');
-        }
-    }
-
-    actualizarCalendario(citas) {
-        const container = document.getElementById('citasContainer');
-        const calendarioHTML = this.generarCalendarioConNavegacion(citas);
-        container.innerHTML = calendarioHTML;
-        this.setupNavegacionSemanal(citas);
     }
 }
 
