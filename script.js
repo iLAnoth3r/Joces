@@ -315,7 +315,7 @@ class AgendaVirtual {
         });
         
         // Crear mensaje de consulta del cliente a la empresa
-        const mensaje = `Hola Joce's Salon Spa & Barbería,
+        const mensaje = `Hola Salon Spa & Barbería,
 
 Me gustaría consultar disponibilidad para agendar una hora:
 
@@ -347,7 +347,7 @@ Quedo atento a su respuesta.
         
         detalles.innerHTML = `
             <h3>¡Consulta enviada!</h3>
-            <p>Hemos abierto WhatsApp para que puedas contactar directamente con Joce's Salon Spa & Barbería.</p>
+            <p>Hemos abierto WhatsApp para que puedas contactar directamente con Salon Spa & Barbería.</p>
             <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0;">
                 <h4>Detalles de tu consulta:</h4>
                 <p><strong>Servicio:</strong> ${cita.servicio}</p>
